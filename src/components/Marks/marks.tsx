@@ -25,7 +25,10 @@ export default function Marks({ name }: MarksProps) {
           flex flex-row items-center justify-between px-2 rounded-[20px]
         ">
           <p className="text-xl font-bold leading-normal pl-2 whitespace-nowrap">{name}</p>
-          <Button className="text-white flex justify-center items-center w-10 h-10 rounded-xl" onClick={onOpen}>
+          <Button 
+            className="text-white flex justify-center items-center w-10 h-10 rounded-xl" 
+            onClick={() => onOpen("view")}
+          >
             <BsArrowRight />
           </Button>
         </div>

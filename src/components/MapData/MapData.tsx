@@ -9,7 +9,7 @@ import useInfo from "@/utils/hooks/useInfo";
 import clsx from "clsx";
 
 export default function MapData() {
-  const {isOpen, onClose} = useInfo()
+  const {isOpenView, onClose} = useInfo()
 
   const imagesMap = [
     "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
@@ -25,7 +25,7 @@ export default function MapData() {
   return (
     <div  className={clsx(
       "w-[580px] h-full absolute bg-white z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
-      isOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
+      isOpenView ? "translate-x-0" : "-translate-x-full pointer-events-none"
     )}>
       <div
         className="w-full h-80 bg-cover bg-center relative transition-all duration-500"
@@ -33,7 +33,7 @@ export default function MapData() {
           backgroundImage: `url(${mainImage})`
         }}
       >
-        <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-white rounded-md text-blue-500 hover:text-white" onClick={onClose} >
+        <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-white rounded-md text-blue-500 hover:text-white" onClick={() => onClose("view")} >
           <CgClose size={20}/>
         </Button>
       </div>
@@ -61,7 +61,7 @@ export default function MapData() {
             <h1 className="text-[#4D6F80] font-bold text-4xl mb-5">Chacoreira do dede</h1>
             <p className="text-[#5C8599] font-semibold text-[18px]">acesso para toda familia de todos os lugares</p>
           </div>
-          <RouteToDestination />
+          <RouteToDestination text="Ver rotas no Google Maps" type="visualizer" />
           <div className="border-[1px] border-[#D3E2E5] my-14"/>
           <div className="">
             <div className="flex flex-col mb-10">
