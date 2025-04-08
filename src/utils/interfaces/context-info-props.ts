@@ -1,5 +1,6 @@
 export type ContextInfoProps = {
-  isOpen: boolean
-  onOpen: () => void
-  onClose: () => void
+  isOpenView: boolean
+  isOpenCreate: boolean
+  onOpen: (type: "view" | "select") => void
+  onClose: (type: "view" | "select") => void
 }
