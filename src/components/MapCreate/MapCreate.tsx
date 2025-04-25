@@ -1,59 +1,86 @@
 "use client"
 import { CgClose } from "react-icons/cg";
 import Button from "../Button";
-import Card from "../Card/Card";
 import RouteToDestination from "../RouteToDestination/RouteToDestination";
-import { BsClock, BsExclamationCircle } from "react-icons/bs";
 import useInfo from "@/utils/hooks/useInfo";
 import clsx from "clsx";
+import {FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import type { FormProps } from "@/utils/interfaces/form-props";
+import InputField from "../InputField/InputField";
+import InputPhotos from "../InputPhotos/InputPhotos";
 
 export default function MapCreate() {
   const {isOpenCreate , onClose} = useInfo()
 
+  const methods = useForm<FormProps>()
+
+  const {register, handleSubmit, formState: {errors}, reset} = methods
+
+  const onSubmit: SubmitHandler<FormProps> = (data) => {
+    console.log("✔ Enviando:", data);
+  } 
 
   return (
     <div className={clsx(
-      "w-[580px] h-full fixed right-0 top-0 bg-white z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
+      "w-[580px] h-full fixed right-0 top-0 bg-black z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
       isOpenCreate  ? "translate-x-0" : "translate-x-full"
     )}>
-      <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-blue-400 rounded-md text-white " onClick={() => onClose("select")} >
+      <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-[#5CE4E4] rounded-md text-white hover:bg-[#039FAA] cursor-pointer" onClick={() =>{onClose("select"); reset()}} >
         <CgClose size={20}/>
       </Button>
-      <div className="py-7 px-10 flex flex-col ">
-          <div className="flex flex-col mb-10">
-            <h1 className="text-[#4D6F80] font-bold text-4xl mb-5">Chacoreira do dede</h1>
-            <p className="text-[#5C8599] font-semibold text-[18px]">acesso para toda familia de todos os lugares</p>
+      <FormProvider {...methods}>
+        <form className="py-7 px-10 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col">
+            <h1 className="text-[#5CE4E4] font-bold text-[30px]">Dados</h1>
           </div>
+          <div className="border-[1px] border-[#D3E2E5] my-10"/>
           <RouteToDestination 
             text="Clique no mapa para adicionar a localização" 
             type="select" 
+            className="mb-10"
           />
-          <div className="border-[1px] border-[#D3E2E5] my-14"/>
-          <div className="">
-            <div className="flex flex-col mb-10">
-              <h1 className="text-[#4D6F80] font-bold text-2xl mb-3">Informações da visita</h1>
-              <p className="text-[#5C8599] font-semibold text-[18px]">Venha como se sentir a vontade e traga muito amor e paciência para dar.</p>
-            </div>
-            <div className="flex flex-row justify-between items-center">
-              <Card
-                Icon={BsClock}
-                className="border border-[#B3DAE2] bg-linear-to-br from-[#E6F7FB] to-white"
-                iconClassName="text-[#15B6D6]"
-                title="Horário de visitas"
-                subTitle="Das 18h até 8h"
-                titleClassName="text-[#5C8599]"
-              />
-              <Card
-                Icon={BsExclamationCircle}
-                className="border border-[#A1E9C5] bg-linear-to-br from-[#E6F7FB] to-white"
-                iconClassName="text-[#39CC83]"
-                title="Horário de visitas"
-                subTitle="Das 18h até 8h"
-                titleClassName="text-[#37C77F]"
-              />
-            </div>
+          <InputField
+            label="Nome" 
+            type="text" 
+            error={errors.name?.message}
+            {...register("name", { required: "Nome é obrigatório" })}
+          />
+          <InputField
+            label="Sobre" 
+            as="textarea"
+            error={errors.description?.message}
+            observation="Máximo de 300 catacteres"
+            className="h-24"
+            {...register("description", { required: "Descrição é obrigatório" })}
+          />
+          <InputPhotos 
+            label="Fotos"
+          /> 
+          <div className="flex flex-col">
+            <h1 className="text-[#5CE4E4] font-bold text-[30px]">Visitação</h1>
           </div>
-      </div>
+          <div className="border-[1px] border-[#D3E2E5] mb-10"/>
+          <InputField
+            label="Instruções"
+            as="textarea" 
+            error={errors.instrutions?.message}
+            className="h-24"
+            {...register("instrutions", { required: "Instruções é obrigatório" })}
+          />
+            <InputField
+            label="Horarios das visitas" 
+            error={errors.description?.message}
+            {...register("visitHour", { required: "Horario é obrigatório" })}
+          />
+          <Button 
+            type="submit" 
+            className="bg-[#5CE4E4] h-16 rounded-[20px] hover:bg-[#039FAA] text-white disabled:bg-[#039faa54] not-disabled:cursor-pointer" 
+            disable={false}
+          >
+            Confirmar
+          </Button>
+        </form>
+      </FormProvider>
     </div>
   );
 }

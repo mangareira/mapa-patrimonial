@@ -24,7 +24,7 @@ export default function MapData() {
 
   return (
     <div  className={clsx(
-      "w-[580px] h-full absolute bg-white z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
+      "w-[580px] h-full absolute bg-black z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
       isOpenView ? "translate-x-0" : "-translate-x-full pointer-events-none"
     )}>
       <div
@@ -33,7 +33,7 @@ export default function MapData() {
           backgroundImage: `url(${mainImage})`
         }}
       >
-        <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-white rounded-md text-blue-500 hover:text-white" onClick={() => onClose("view")} >
+        <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-black rounded-md text-white hover:text-gray-300 hover:bg-gray-950 cursor-pointer" onClick={() => onClose("view")} >
           <CgClose size={20}/>
         </Button>
       </div>
@@ -58,20 +58,20 @@ export default function MapData() {
       </div>
       <div className="py-7 px-10 flex flex-col ">
           <div className="flex flex-col mb-10">
-            <h1 className="text-[#4D6F80] font-bold text-4xl mb-5">Chacoreira do dede</h1>
-            <p className="text-[#5C8599] font-semibold text-[18px]">acesso para toda familia de todos os lugares</p>
+            <h1 className="text-[#5CE4E4] font-bold text-4xl mb-5">Chacoreira do dede</h1>
+            <p className="text-white font-semibold text-[18px]">acesso para toda familia de todos os lugares</p>
           </div>
           <RouteToDestination text="Ver rotas no Google Maps" type="visualizer" />
-          <div className="border-[1px] border-[#D3E2E5] my-14"/>
+          <div className="border-[1px] border-[#5CE4E4] my-14"/>
           <div className="">
             <div className="flex flex-col mb-10">
-              <h1 className="text-[#4D6F80] font-bold text-2xl mb-3">Informações da visita</h1>
-              <p className="text-[#5C8599] font-semibold text-[18px]">Venha como se sentir a vontade e traga muito amor e paciência para dar.</p>
+              <h1 className="text-[#5CE4E4] font-bold text-2xl mb-3">Informações da visita</h1>
+              <p className="text-white font-semibold text-[18px]">Venha como se sentir a vontade e traga muito amor e paciência para dar.</p>
             </div>
             <div className="flex flex-row justify-between items-center">
               <Card
                 Icon={BsClock}
-                className="border border-[#B3DAE2] bg-linear-to-br from-[#E6F7FB] to-white"
+                className="border border-[#5CE4E4] bg-linear-to-br from-[#E6F7FB] to-white"
                 iconClassName="text-[#15B6D6]"
                 title="Horário de visitas"
                 subTitle="Das 18h até 8h"

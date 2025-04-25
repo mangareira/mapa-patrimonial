@@ -10,7 +10,7 @@ export default function Maps() {
     <div className="h-full relative">
       <MapMarks />
       <Button 
-        className="absolute bottom-10 right-10 flex justify-center items-center z-10 w-16 h-16 rounded-[20px] " 
+        className="absolute bottom-10 right-10 flex justify-center items-center z-10 w-16 h-16 rounded-[20px] hover:bg-[#039FAA] cursor-pointer " 
         onClick={() => onOpen("select")}
       >
         <BiPlus size={40} className="text-white" />
