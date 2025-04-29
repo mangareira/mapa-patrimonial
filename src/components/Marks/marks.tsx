@@ -1,38 +1,71 @@
-import Image from "next/image";
 import Button from "../Button";
 import { BsArrowRight } from "react-icons/bs";
 import type { MarksProps } from "@/utils/interfaces/marks-props";
 import useInfo from "@/utils/hooks/useInfo";
+import { Marker, OverlayView, OverlayViewF } from "@react-google-maps/api";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function Marks({ name }: MarksProps) {
-  const {onOpen} = useInfo()
+export default function Marks({ name, position, marker_pin }: MarksProps) {
+  const { onOpen } = useInfo();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const getPixelPositionOffset = (width: number, height: number) => ({
+    x: 20,
+    y: -height / 2 
+  })
+
+  function createKey(location: google.maps.LatLngLiteral) {
+    return location.lat + location.lng
+  }
+
   return (
-    <div className="absolute bottom-1/2 right-1/2 flex items-center" key={name}>
-      <div className="relative group">
-        <Image
-          src="/logo.png"
-          alt="mark"
-          width={50}
-          height={50}
-          className="cursor-pointer "
-        />
-        <div className="
-          absolute left-full top-1/2 -translate-y-1/2
-          whitespace-nowrap opacity-0 translate-x-[-10px] 
-          pointer-events-none group-hover:opacity-100 
-          group-hover:translate-x-0 group-hover:pointer-events-auto 
-          transition-all duration-700 bg-black h-[64px] w-[244px] 
-          flex flex-row items-center justify-between px-2 rounded-[20px]
-        ">
-          <p className="text-xl font-bold leading-normal pl-2 whitespace-nowrap text-white">{name}</p>
-          <Button 
-            className="text-white flex justify-center items-center w-10 h-10 rounded-xl hover:bg-[#039FAA] cursor-pointer" 
-            onClick={() => onOpen("view")}
+    <>
+      <Marker
+        position={position}
+        onMouseOver={() => setIsHovered(true)}
+        onMouseOut={() => setIsHovered(false)}
+        options={{
+          icon: {
+            url: `/${marker_pin}.png`,
+            scaledSize: new google.maps.Size(70, 70),
+            anchor: new google.maps.Point(40, 40),
+          },
+        }}
+      />
+
+      <AnimatePresence>
+        {isHovered && (
+          <OverlayViewF
+            position={position}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            getPixelPositionOffset={getPixelPositionOffset}
+            key={createKey(position)}
           >
-            <BsArrowRight />
-          </Button>
-        </div>
-      </div>
-    </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative group"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <div className="
+                bg-black h-[64px] w-[244px] flex items-center
+                justify-between px-2 rounded-[20px] shadow-xl">
+                <p className="text-xl font-bold pl-2 text-white truncate">{name}</p>
+                <Button
+                  className="text-white hover:bg-[#039FAA] rounded-lg p-2 transition-colors"
+                  onClick={() => onOpen("view")}
+                >
+                  <BsArrowRight size={24} />
+                </Button>
+              </div>
+            </motion.div>
+          </OverlayViewF>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
