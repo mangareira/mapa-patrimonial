@@ -1,5 +1,6 @@
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap } from "@react-google-maps/api";
 import Marks from "./Marks/marks";
+import { useGoogle } from "@/utils/hooks/useGoogle";
 
 
 const mapStyles = [
@@ -22,6 +23,8 @@ const mapOptions = {
 };
 
 export default function MapMarks() {
+  const { containerStyle, isLoaded } = useGoogle()
+
   const marks = [
     {
       position: {lat: -5.505111, lng: -45.252024},
@@ -34,15 +37,6 @@ export default function MapMarks() {
     lat: -5.5077356,
     lng: -45.2444862
   }
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
-  })
-
-  const containerStyle = {
-    width: '100%',
-    height: '100%'
-  };
   return isLoaded ? (
     <div className="relative h-full">
       <div className="bg-cyan-200 h-full">

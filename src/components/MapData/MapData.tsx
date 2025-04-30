@@ -58,15 +58,19 @@ export default function MapData() {
       </div>
       <div className="py-7 px-10 flex flex-col ">
           <div className="flex flex-col mb-10">
-            <h1 className="text-[#5CE4E4] font-bold text-4xl mb-5">Chacoreira do dede</h1>
-            <p className="text-white font-semibold text-[18px]">acesso para toda familia de todos os lugares</p>
+            <h1 className="text-[#5CE4E4] font-bold text-4xl mb-5">Cachoeira do Dedé</h1>
+            <p className="text-white font-semibold text-[18px]">Acesso para toda família de todos os lugares!</p>
           </div>
-          <RouteToDestination text="Ver rotas no Google Maps" type="visualizer" />
+          <RouteToDestination 
+            text="Ver rotas no Google Maps" 
+            type="visualizer" 
+            position={{ lat: -5.505439, lng: -45.261990}}
+          />
           <div className="border-[1px] border-[#5CE4E4] my-14"/>
           <div className="">
             <div className="flex flex-col mb-10">
               <h1 className="text-[#5CE4E4] font-bold text-2xl mb-3">Informações da visita</h1>
-              <p className="text-white font-semibold text-[18px]">Venha como se sentir a vontade e traga muito amor e paciência para dar.</p>
+              <p className="text-white font-semibold text-[18px]">Venha se sentir a vontade e traga sua família.</p>
             </div>
             <div className="flex flex-row justify-between items-center">
               <Card
@@ -81,8 +85,8 @@ export default function MapData() {
                 Icon={BsExclamationCircle}
                 className="border border-[#A1E9C5] bg-linear-to-br from-[#E6F7FB] to-white"
                 iconClassName="text-[#39CC83]"
-                title="Horário de visitas"
-                subTitle="Das 18h até 8h"
+                title="Atendemos"
+                subTitle="Fim de semana"
                 titleClassName="text-[#37C77F]"
               />
             </div>

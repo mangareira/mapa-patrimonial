@@ -5,4 +5,8 @@ export type RouteToDestinationProps = {
 
 export type RouteToDestinationMapProps = {
   type: "visualizer" | "select"
+  position: {
+    lat: number
+    lng: number
+  }
 }

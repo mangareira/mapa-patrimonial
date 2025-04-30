@@ -46,10 +46,10 @@ export default function MapCreate() {
             {...register("name", { required: "Nome é obrigatório" })}
           />
           <InputField
-            label="Sobre" 
+            label="Descrição" 
             as="textarea"
             error={errors.description?.message}
-            observation="Máximo de 300 catacteres"
+            observation="Máximo de 300 caracteres"
             className="h-24"
             {...register("description", { required: "Descrição é obrigatório" })}
           />
@@ -68,9 +68,9 @@ export default function MapCreate() {
             {...register("instrutions", { required: "Instruções é obrigatório" })}
           />
             <InputField
-            label="Horarios das visitas" 
-            error={errors.description?.message}
-            {...register("visitHour", { required: "Horario é obrigatório" })}
+            label="Horários das visitas" 
+            error={errors.visitHour?.message}
+            {...register("visitHour", { required: "Horário é obrigatório" })}
           />
           <Button 
             type="submit" 
