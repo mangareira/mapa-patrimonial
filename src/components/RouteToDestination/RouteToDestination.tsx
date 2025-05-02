@@ -3,12 +3,11 @@ import RouteToDestinationMap from "./RouteToDestinationMap";
 import clsx from "clsx";
 import { useGoogle } from "@/utils/hooks/useGoogle";
 
-export default function RouteToDestination({text, type, className, position}: RouteToDestinationProps) {
-  const { location } = useGoogle()
+export default function RouteToDestination({text, type, className, position, marker_pin, onSelect}: RouteToDestinationProps) {
+  const {location} = useGoogle()
 
   const handleOpenGoogleMaps = () => {
     if (type === "select") return;
-    
     const originParam = `${location.lat},${location.lng}`;
     const destinationParam = `${position.lat},${position.lng}`;
     
@@ -23,6 +22,8 @@ export default function RouteToDestination({text, type, className, position}: Ro
       <RouteToDestinationMap 
         type={type} 
         position={position}
+        marker_pin={marker_pin}
+        onSelect={onSelect}
       />
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div 

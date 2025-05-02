@@ -65,6 +65,7 @@ export default function MapData() {
             text="Ver rotas no Google Maps" 
             type="visualizer" 
             position={{ lat: -5.505439, lng: -45.261990}}
+            marker_pin="logo-1"
           />
           <div className="border-[1px] border-[#5CE4E4] my-14"/>
           <div className="">

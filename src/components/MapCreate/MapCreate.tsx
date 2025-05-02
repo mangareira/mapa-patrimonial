@@ -12,9 +12,13 @@ import InputPhotos from "../InputPhotos/InputPhotos";
 export default function MapCreate() {
   const {isOpenCreate , onClose} = useInfo()
 
-  const methods = useForm<FormProps>()
+  const methods = useForm<FormProps>({
+    defaultValues: {
+      location: { lat: -5.505439, lng: -45.261990 }
+    }
+  })
 
-  const {register, handleSubmit, formState: {errors}, reset} = methods
+  const {register, handleSubmit, formState: {errors}, reset, setValue} = methods
 
   const onSubmit: SubmitHandler<FormProps> = (data) => {
     console.log("✔ Enviando:", data);
@@ -35,9 +39,11 @@ export default function MapCreate() {
           </div>
           <div className="border-[1px] border-[#D3E2E5] my-10"/>
           <RouteToDestination 
+            position={{ lat: -5.505439, lng: -45.261990}}
             text="Clique no mapa para adicionar a localização" 
             type="select" 
             className="mb-10"
+            onSelect={(position) => setValue('location', position, { shouldValidate: true })}
           />
           <InputField
             label="Nome" 

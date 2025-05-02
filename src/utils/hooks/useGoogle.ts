@@ -2,6 +2,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 
 export const useGoogle = () => {
+  const [selectedPosition, setSelectedPosition] = useState<google.maps.LatLngLiteral | null>(null);
   const [location, setLocation] = useState({
     lat: 0,
     lng: 0
@@ -32,9 +33,13 @@ export const useGoogle = () => {
     borderRadius: "20px 20px 0px 0px"
   };
 
+
+
   return {
     isLoaded,
     containerStyle,
-    location
+    location,
+    selectedPosition,
+    setSelectedPosition
   }
 }

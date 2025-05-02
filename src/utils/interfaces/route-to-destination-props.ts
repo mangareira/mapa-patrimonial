@@ -9,4 +9,6 @@ export type RouteToDestinationMapProps = {
     lat: number
     lng: number
   }
+  marker_pin?: string
+  onSelect: (position: google.maps.LatLngLiteral) => void
 }

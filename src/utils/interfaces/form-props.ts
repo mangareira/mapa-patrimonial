@@ -1,5 +1,5 @@
 export type FormProps = {
-  location: string
+  location: google.maps.LatLngLiteral
   name: string
   description: string
   photos: { url: string }[]

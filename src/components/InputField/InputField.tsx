@@ -37,7 +37,7 @@ const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputField
             name={name}
             ref={ref as React.Ref<HTMLTextAreaElement>}
             className={clsx(
-              "px-7 py-3 rounded-[20px] border border-[#D3E2E5] bg-[#F5F8FA] text-[18px] text-white focus:outline-none focus:ring-1 focus:ring-blue-400  resize-y",
+              "px-7 py-3 rounded-[20px] border border-[#D3E2E5] bg-[#F5F8FA] text-[18px] text-black focus:outline-none focus:ring-1 focus:ring-blue-400  resize-y",
               error && "border-red-500",
               className
             )}
@@ -49,7 +49,7 @@ const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputField
             name={name}
             ref={ref as React.Ref<HTMLInputElement>}
             className={clsx(
-              "px-7 rounded-[20px] border border-[#D3E2E5] bg-[#F5F8FA] h-16 text-[18px] text-[#5CE4E4] focus:outline-none focus:ring-1 focus:ring-blue-400",
+              "px-7 rounded-[20px] border border-[#D3E2E5] bg-[#F5F8FA] h-16 text-[18px] text-black focus:outline-none focus:ring-1 focus:ring-blue-400",
               error && "border-red-500",
               className
             )}

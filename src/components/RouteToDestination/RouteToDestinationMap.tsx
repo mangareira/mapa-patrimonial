@@ -2,6 +2,7 @@ import { useGoogle } from "@/utils/hooks/useGoogle";
 import type { RouteToDestinationMapProps } from "@/utils/interfaces/route-to-destination-props";
 import { GoogleMap } from "@react-google-maps/api";
 import DestinationMap from "../DestinationMap/DestinationMap";
+import SelectLocal from "../SelectLocal/SelectLocal";
 
 const mapStyles = [
   {
@@ -22,8 +23,18 @@ const mapOptions = {
   scaleControl: false
 };
 
-export default function RouteToDestinationMap({type, position}: RouteToDestinationMapProps) {
-  const {containerStyle, isLoaded, location} = useGoogle()
+export default function RouteToDestinationMap({type, position, marker_pin, onSelect}: RouteToDestinationMapProps) {
+  const {containerStyle, isLoaded, selectedPosition, setSelectedPosition } = useGoogle()
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (type === "select" && e.latLng) {
+      const newPos = {
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng()
+      };
+      setSelectedPosition(newPos);
+      onSelect?.(newPos)
+    }
+  };
 
   return isLoaded ? (
     <div className="flex items-center justify-center bg-cyan-300 flex-2/1 rounded-t-3xl">
@@ -32,8 +43,12 @@ export default function RouteToDestinationMap({type, position}: RouteToDestinati
         mapContainerStyle={containerStyle}
         zoom={13}
         options={mapOptions}
+        onClick={handleMapClick}
       >
-        {type === "visualizer" && <DestinationMap origin={location} destination={position} />}
+        {type === "visualizer" && <DestinationMap destination={position} marker_pin={marker_pin || ""}/>}
+        {type === "select" && <SelectLocal
+          selectedPosition={selectedPosition || position}
+        />}
       </GoogleMap>
     </div>
   ) : <></>

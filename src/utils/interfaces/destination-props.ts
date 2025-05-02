@@ -1,4 +1,4 @@
 export type DestinationMapProps = {
-  origin: google.maps.LatLngLiteral
   destination: google.maps.LatLngLiteral
+  marker_pin: string
 }
