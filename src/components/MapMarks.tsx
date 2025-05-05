@@ -1,6 +1,7 @@
 import { GoogleMap } from "@react-google-maps/api";
 import Marks from "./Marks/marks";
 import { useGoogle } from "@/utils/hooks/useGoogle";
+import { useGetAllLocals } from "@/utils/api/routes/useGetAllLocals";
 
 
 const mapStyles = [
@@ -25,19 +26,14 @@ const mapOptions = {
 export default function MapMarks() {
   const { containerStyle, isLoaded } = useGoogle()
 
-  const marks = [
-    {
-      position: {lat: -5.505111, lng: -45.252024},
-      name: "Cachoeira do dede",
-      marker_pin: "logo-1"
-    },
-  ];
+  const { data, isSuccess } = useGetAllLocals()
+  const marks = data || []
   
   const center = {
     lat: -5.5077356,
     lng: -45.2444862
   }
-  return isLoaded ? (
+  return isLoaded && isSuccess ? (
     <div className="relative h-full">
       <div className="bg-cyan-200 h-full">
         <GoogleMap
@@ -50,8 +46,8 @@ export default function MapMarks() {
             <Marks 
               name={mark.name} 
               key={mark.name} 
-              position={mark.position}
-              marker_pin={mark.marker_pin}
+              position={mark.location}
+              marker_pin={"logo-1"}
             />
           ))}
         </GoogleMap>

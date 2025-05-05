@@ -68,5 +68,22 @@ const app = new Hono()
       return c.json(result)
     }
   )
+  .get(
+    "/",
+    async (c) => {
+      const result =  await prisma.locals.findMany({
+        select: {
+          name: true,
+          location: {
+            omit: {
+              id: true
+            }
+          },
+        }
+      })
+
+      return c.json(result)
+    }
+  )
 
 export default app
