@@ -44,8 +44,9 @@ export default function MapMarks() {
         >
           {marks.map((mark) => (
             <Marks 
+              id={mark.id}
               name={mark.name} 
-              key={mark.name} 
+              key={mark.id} 
               position={mark.location}
               marker_pin={"logo-1"}
             />

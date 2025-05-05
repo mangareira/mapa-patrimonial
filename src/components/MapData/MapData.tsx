@@ -7,9 +7,11 @@ import { BsClock, BsExclamationCircle } from "react-icons/bs";
 import { useState } from "react";
 import useInfo from "@/utils/hooks/useInfo";
 import clsx from "clsx";
+import { useGetLocal } from "@/utils/api/routes/useGetLocal";
 
 export default function MapData() {
-  const {isOpenView, onClose} = useInfo()
+  const {isOpenView, onClose, id} = useInfo()
+  const { data, isLoading } = useGetLocal(id)
 
   const imagesMap = [
     "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
@@ -25,74 +27,79 @@ export default function MapData() {
   return (
     <div  className={clsx(
       "w-[580px] h-full absolute bg-black z-20 overflow-y-auto shadow-xl transition-transform duration-500 ease-in-out",
-      isOpenView ? "translate-x-0" : "-translate-x-full pointer-events-none"
+      isOpenView && !isLoading ? "translate-x-0" : "-translate-x-full pointer-events-none"
     )}>
-      <div
-        className="w-full h-80 bg-cover bg-center relative transition-all duration-500"
-        style={{
-          backgroundImage: `url(${mainImage})`
-        }}
-      >
-        <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-black rounded-md text-white hover:text-gray-300 hover:bg-gray-950 cursor-pointer" onClick={() => onClose("view")} >
-          <CgClose size={20}/>
-        </Button>
-      </div>
-      <div className="p-4">
-        <div className="h-16 grid grid-cols-6 grid-rows-1 gap-1 justify-items-center">
-          {imagesMap.map((image, index) => (
-            <div
-              key={image + index}
-              className="w-16 h-16 bg-cover bg-center rounded-[20px] cursor-pointer hover:scale-105 transition-all duration-300"
-              style={{ backgroundImage: `url(${image})` }}
-              role="button"
-              tabIndex={0}
-              onClick={() => setMainImage(image)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setMainImage(image);
-                }
-              }}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="py-7 px-10 flex flex-col ">
-          <div className="flex flex-col mb-10">
-            <h1 className="text-[#5CE4E4] font-bold text-4xl mb-5">Cachoeira do Dedé</h1>
-            <p className="text-white font-semibold text-[18px]">Acesso para toda família de todos os lugares!</p>
+      {!isLoading && data && 
+        <>
+          <div
+            className="w-full h-80 bg-cover bg-center relative transition-all duration-500"
+            style={{
+              backgroundImage: `url(${mainImage})`
+            }}
+          >
+            <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-black rounded-md text-white hover:text-gray-300 hover:bg-gray-950 cursor-pointer" onClick={() => onClose("view")} >
+              <CgClose size={20}/>
+            </Button>
           </div>
-          <RouteToDestination 
-            text="Ver rotas no Google Maps" 
-            type="visualizer" 
-            position={{ lat: -5.505439, lng: -45.261990}}
-            marker_pin="logo-1"
-          />
-          <div className="border-[1px] border-[#5CE4E4] my-14"/>
-          <div className="">
-            <div className="flex flex-col mb-10">
-              <h1 className="text-[#5CE4E4] font-bold text-2xl mb-3">Informações da visita</h1>
-              <p className="text-white font-semibold text-[18px]">Venha se sentir a vontade e traga sua família.</p>
-            </div>
-            <div className="flex flex-row justify-between items-center">
-              <Card
-                Icon={BsClock}
-                className="border border-[#5CE4E4] bg-linear-to-br from-[#E6F7FB] to-white"
-                iconClassName="text-[#15B6D6]"
-                title="Horário de visitas"
-                subTitle="Das 18h até 8h"
-                titleClassName="text-[#5C8599]"
-              />
-              <Card
-                Icon={BsExclamationCircle}
-                className="border border-[#A1E9C5] bg-linear-to-br from-[#E6F7FB] to-white"
-                iconClassName="text-[#39CC83]"
-                title="Atendemos"
-                subTitle="Fim de semana"
-                titleClassName="text-[#37C77F]"
-              />
+          <div className="p-4">
+            <div className="h-16 grid grid-cols-6 grid-rows-1 gap-1 justify-items-center">
+              {imagesMap.map((image, index) => (
+                <div
+                  key={image + index}
+                  className="w-16 h-16 bg-cover bg-center rounded-[20px] cursor-pointer hover:scale-105 transition-all duration-300"
+                  style={{ backgroundImage: `url(${image})` }}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setMainImage(image)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setMainImage(image);
+                    }
+                  }}
+                />
+              ))}
             </div>
           </div>
-      </div>
+          <div className="py-7 px-10 flex flex-col ">
+              <div className="flex flex-col mb-10">
+                <h1 className="text-[#5CE4E4] font-bold text-4xl mb-5">{data.name}</h1>
+                <p className="text-white font-semibold text-[18px]">{data.description}</p>
+              </div>
+              <RouteToDestination 
+                onSelect={() => {}}
+                text="Ver rotas no Google Maps" 
+                type="visualizer" 
+                position={data.location}
+                marker_pin="logo-1"
+              />
+              <div className="border-[1px] border-[#5CE4E4] my-14"/>
+              <div className="">
+                <div className="flex flex-col mb-10">
+                  <h1 className="text-[#5CE4E4] font-bold text-2xl mb-3">Informações da visita</h1>
+                  <p className="text-white font-semibold text-[18px]">{data.instructions}</p>
+                </div>
+                <div className="flex flex-row justify-between items-center">
+                  <Card
+                    Icon={BsClock}
+                    className="border border-[#5CE4E4] bg-linear-to-br from-[#E6F7FB] to-white"
+                    iconClassName="text-[#15B6D6]"
+                    title="Horário de visitas"
+                    subTitle={data.visitHour}
+                    titleClassName="text-[#5C8599]"
+                  />
+                  <Card
+                    Icon={BsExclamationCircle}
+                    className="border border-[#A1E9C5] bg-linear-to-br from-[#E6F7FB] to-white"
+                    iconClassName="text-[#39CC83]"
+                    title={data.weekend=== "yes" ? "Atendemos" : "Não atendemos"}
+                    subTitle="Fim de semana"
+                    titleClassName="text-[#37C77F]"
+                  />
+                </div>
+              </div>
+          </div>
+        </>
+      }
     </div>
   );
 }

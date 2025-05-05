@@ -1,11 +1,16 @@
 import { client } from "../hono";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetAllLocals = () => {
+export const useGetLocal = (id: string) => {
   const query = useQuery({
-    queryKey: ['locals'],
+    enabled:!!id,
+    queryKey: ['locals', { id }],
     queryFn: async () => {
-      const response = await client.api.locals.$get();
+      const response = await client.api.locals[':id'].$get({
+        param: {
+          id
+        }
+      });
       if (!response.ok) throw new Error('failed to fecth local');
       const res = await response.json();
       return res ;

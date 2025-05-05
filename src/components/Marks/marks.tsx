@@ -6,7 +6,7 @@ import { Marker, OverlayView, OverlayViewF } from "@react-google-maps/api";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function Marks({ name, position, marker_pin }: MarksProps) {
+export default function Marks({ name, position, marker_pin, id }: MarksProps) {
   const { onOpen } = useInfo();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -57,7 +57,7 @@ export default function Marks({ name, position, marker_pin }: MarksProps) {
                 <p className="text-xl font-bold pl-2 text-white truncate">{name}</p>
                 <Button
                   className="text-white hover:bg-[#039FAA] rounded-lg p-2 transition-colors"
-                  onClick={() => onOpen("view")}
+                  onClick={() => onOpen("view", id)}
                 >
                   <BsArrowRight size={24} />
                 </Button>

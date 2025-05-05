@@ -1,4 +1,5 @@
 export type MarksProps = {
+  id: string
   name: string
   position: {
     lat: number 

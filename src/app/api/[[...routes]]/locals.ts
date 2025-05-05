@@ -73,12 +73,44 @@ const app = new Hono()
     async (c) => {
       const result =  await prisma.locals.findMany({
         select: {
+          id: true,
           name: true,
           location: {
             omit: {
               id: true
             }
           },
+        },
+      })
+
+      return c.json(result)
+    }
+  )
+  .get(
+    "/:id",
+    async (c) => {
+      const { id } = c.req.param()
+
+      const result =  await prisma.locals.findUnique({
+        where: {
+          id,
+        },
+        omit: {
+          id: true,
+          locationId: true
+        },
+        include:{
+          location: {
+            omit: {
+              id: true
+            }
+          },
+          photos: {
+            omit: {
+              id: true,
+              localsId: true,
+            }
+          }
         }
       })
 
