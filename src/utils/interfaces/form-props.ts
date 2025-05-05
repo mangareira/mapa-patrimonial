@@ -3,7 +3,7 @@ export type FormProps = {
   name: string
   description: string
   photos: { url: string }[]
-  instrutions: string
+  instructions: string
   visitHour: string
   weekend: "yes" | "no"
 }

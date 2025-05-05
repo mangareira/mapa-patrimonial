@@ -8,9 +8,11 @@ import {FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import type { FormProps } from "@/utils/interfaces/form-props";
 import InputField from "../InputField/InputField";
 import InputPhotos from "../InputPhotos/InputPhotos";
+import { useCreateLocals } from "@/utils/api/routes/useCreateLocals";
 
 export default function MapCreate() {
   const {isOpenCreate , onClose} = useInfo()
+  const { mutate } = useCreateLocals()
 
   const methods = useForm<FormProps>({
     defaultValues: {
@@ -21,7 +23,12 @@ export default function MapCreate() {
   const {register, handleSubmit, formState: {errors}, reset, setValue} = methods
 
   const onSubmit: SubmitHandler<FormProps> = (data) => {
-    console.log("✔ Enviando:", data);
+    mutate({...data, weekend: "yes"}, {
+      onSuccess: () => {
+        onClose("select")
+        reset()
+      }
+    })
   } 
 
   return (
@@ -69,9 +76,9 @@ export default function MapCreate() {
           <InputField
             label="Instruções"
             as="textarea" 
-            error={errors.instrutions?.message}
+            error={errors.instructions?.message}
             className="h-24"
-            {...register("instrutions", { required: "Instruções é obrigatório" })}
+            {...register("instructions", { required: "Instruções é obrigatório" })}
           />
             <InputField
             label="Horários das visitas" 

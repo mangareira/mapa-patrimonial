@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Locals {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  photos       Photo[]
+  instructions String
+  visitHour    String
+  weekend      Weekend
+  location     Location @relation(fields: [locationId], references: [id])
+  locationId   String   @unique @db.ObjectId
+  createdAt    DateTime @default(now())
+}
+
+model Location {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  lat    Float
+  lng    Float
+  locals Locals?
+}
+
+model Photo {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  url      String
+  locals   Locals? @relation(fields: [localsId], references: [id])
+  localsId String? @db.ObjectId
+}
+
+enum Weekend {
+  yes
+  no
+}
