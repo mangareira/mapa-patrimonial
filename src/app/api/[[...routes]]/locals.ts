@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { newLinks } from "@/utils/functions/newLinks";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
@@ -23,11 +24,14 @@ const app = new Hono()
         }),
         photos: z.array(
           z.object({
-            url: z.string({
-              message: "fotos são obrigatorias"
-            }).url({
-              message: "Tem que ser uma url valida"
-            })
+            url: z
+            .string()
+            .url()
+            .refine(
+              (url) =>
+                url.includes("drive.google.com") || url.includes("youtube"),
+              "URL deve ser do Google Drive ou YouTube"
+            )
           })
         ),
         instructions: z.string({
@@ -44,6 +48,8 @@ const app = new Hono()
     async (c) => {
       const values = c.req.valid("json")
       
+      const newLinksPhotos = newLinks(values)
+
       const result = await prisma.locals.create({
         data: {
           name: values.name,
@@ -56,7 +62,7 @@ const app = new Hono()
           },
           photos: {
             createMany: {
-              data: values.photos
+              data: newLinksPhotos
             }
           },
           instructions: values.instructions,

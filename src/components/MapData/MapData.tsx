@@ -4,25 +4,24 @@ import Button from "../Button";
 import Card from "../Card/Card";
 import RouteToDestination from "../RouteToDestination/RouteToDestination";
 import { BsClock, BsExclamationCircle } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useInfo from "@/utils/hooks/useInfo";
 import clsx from "clsx";
 import { useGetLocal } from "@/utils/api/routes/useGetLocal";
+import MainImage from "../MainImage/MainImage";
+import ImagesGrid from "../ImagesGrid/ImagesGrid";
 
 export default function MapData() {
   const {isOpenView, onClose, id} = useInfo()
   const { data, isLoading } = useGetLocal(id)
 
-  const imagesMap = [
-    "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
-    "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
-    "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
-    "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
-    "https://blog.123milhas.com/wp-content/uploads/2023/08/lugares-para-conhecer-o-patrimonio-historico-e-cultural-igreja-de-ouro-preto-conexao123.jpg",
-    "https://images.contentstack.io/v3/assets/blt312bfd9a3caf2bfc/blt66f1f1c965805781/6633d9be693c2901708b1fc6/Capa_Blog_-_29.04-02.jpg?auto=webp&format=pjpg&quality=80&width=1920&height=1080&fit=crop"
-  ]
+  const [mainImage, setMainImage] = useState<string | null>(null);
 
-  const [mainImage, setMainImage] = useState(imagesMap[0]);
+  useEffect(() => {
+    if (data?.photos && Array.isArray(data.photos) && data.photos.length > 0) {
+      setMainImage(data.photos[0].url);
+    }
+  }, [data]);
 
   return (
     <div  className={clsx(
@@ -33,29 +32,20 @@ export default function MapData() {
         <>
           <div
             className="w-full h-80 bg-cover bg-center relative transition-all duration-500"
-            style={{
-              backgroundImage: `url(${mainImage})`
-            }}
           >
+            <MainImage mainImage={mainImage} />
             <Button className=" absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-black rounded-md text-white hover:text-gray-300 hover:bg-gray-950 cursor-pointer" onClick={() => onClose("view")} >
               <CgClose size={20}/>
             </Button>
           </div>
           <div className="p-4">
             <div className="h-16 grid grid-cols-6 grid-rows-1 gap-1 justify-items-center">
-              {imagesMap.map((image, index) => (
-                <div
-                  key={image + index}
-                  className="w-16 h-16 bg-cover bg-center rounded-[20px] cursor-pointer hover:scale-105 transition-all duration-300"
-                  style={{ backgroundImage: `url(${image})` }}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setMainImage(image)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setMainImage(image);
-                    }
-                  }}
+              {data.photos.map((image, index) => (
+                <ImagesGrid 
+                  image={image} 
+                  index={index} 
+                  setMainImage={setMainImage} 
+                  key={image.url + index}
                 />
               ))}
             </div>
