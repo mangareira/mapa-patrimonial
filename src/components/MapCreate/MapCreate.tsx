@@ -10,6 +10,7 @@ import InputField from "../InputField/InputField";
 import InputPhotos from "../InputPhotos/InputPhotos";
 import { useCreateLocals } from "@/utils/api/routes/useCreateLocals";
 import SelectMarker from "../SelectMarker/SelectMarker";
+import WeekendToggle from "../WeekendToogle/WeekendToogle";
 
 export default function MapCreate() {
   const {isOpenCreate , onClose} = useInfo()
@@ -24,7 +25,7 @@ export default function MapCreate() {
   const {register, handleSubmit, formState: {errors}, reset, setValue} = methods
 
   const onSubmit: SubmitHandler<FormProps> = (data) => {
-    mutate({...data, weekend: "yes"}, {
+    mutate(data, {
       onSuccess: () => {
         onClose("select")
         reset()
@@ -87,6 +88,7 @@ export default function MapCreate() {
             error={errors.visitHour?.message}
             {...register("visitHour", { required: "Horário é obrigatório" })}
           />
+          <WeekendToggle />
           <Button 
             type="submit" 
             className="bg-[#5CE4E4] h-16 rounded-[20px] hover:bg-[#039FAA] text-white disabled:bg-[#039faa54] not-disabled:cursor-pointer" 

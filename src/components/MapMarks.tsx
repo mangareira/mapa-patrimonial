@@ -48,7 +48,7 @@ export default function MapMarks() {
               name={mark.name} 
               key={mark.id} 
               position={mark.location}
-              marker_pin={"logo-1"}
+              marker_pin={mark.marker_pin}
             />
           ))}
         </GoogleMap>

@@ -60,7 +60,7 @@ export default function MapData() {
                 text="Ver rotas no Google Maps" 
                 type="visualizer" 
                 position={data.location}
-                marker_pin="logo-1"
+                marker_pin={data.marker_pin}
               />
               <div className="border-[1px] border-[#5CE4E4] my-14"/>
               <div className="">
@@ -79,11 +79,11 @@ export default function MapData() {
                   />
                   <Card
                     Icon={BsExclamationCircle}
-                    className="border border-[#A1E9C5] bg-linear-to-br from-[#E6F7FB] to-white"
-                    iconClassName="text-[#39CC83]"
+                    className={`border  bg-linear-to-br ${data.weekend === "yes" ? "from-[#E6F7FB] to-white border-[#A1E9C5]" : "from-[#ffdcdf] to-white border-[#e9a1a1]"}`}
+                    iconClassName={data.weekend === "yes" ? "text-[#39CC83]" : "text-[#ff1d24]"}
                     title={data.weekend=== "yes" ? "Atendemos" : "Não atendemos"}
                     subTitle="Fim de semana"
-                    titleClassName="text-[#37C77F]"
+                    titleClassName={data.weekend === "yes" ? "text-[#37C77F]" : "text-[#ff1d24]"}
                   />
                 </div>
               </div>

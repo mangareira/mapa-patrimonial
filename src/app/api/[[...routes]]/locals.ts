@@ -90,6 +90,7 @@ const app = new Hono()
               id: true
             }
           },
+          marker_pin: true
         },
       })
 
