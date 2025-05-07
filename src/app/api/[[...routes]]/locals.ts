@@ -22,6 +22,9 @@ const app = new Hono()
         }, {
           message: "localização obrigatoria"
         }),
+        marker_pin: z
+          .string()
+          .nonempty("Selecione um tipo de patrimônio"),
         photos: z.array(
           z.object({
             url: z
@@ -60,6 +63,7 @@ const app = new Hono()
               lng: values.location.lng
             }
           },
+          marker_pin: values.marker_pin,
           photos: {
             createMany: {
               data: newLinksPhotos

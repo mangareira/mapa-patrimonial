@@ -6,4 +6,5 @@ export type FormProps = {
   instructions: string
   visitHour: string
   weekend: "yes" | "no"
+  marker_pin: string
 }

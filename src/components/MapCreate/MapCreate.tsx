@@ -9,6 +9,7 @@ import type { FormProps } from "@/utils/interfaces/form-props";
 import InputField from "../InputField/InputField";
 import InputPhotos from "../InputPhotos/InputPhotos";
 import { useCreateLocals } from "@/utils/api/routes/useCreateLocals";
+import SelectMarker from "../SelectMarker/SelectMarker";
 
 export default function MapCreate() {
   const {isOpenCreate , onClose} = useInfo()
@@ -66,6 +67,7 @@ export default function MapCreate() {
             className="h-24"
             {...register("description", { required: "Descrição é obrigatório" })}
           />
+          <SelectMarker/>
           <InputPhotos 
             label="Fotos"
           /> 

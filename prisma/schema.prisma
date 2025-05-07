@@ -23,6 +23,7 @@ model Locals {
   visitHour    String
   weekend      Weekend
   location     Location @relation(fields: [locationId], references: [id])
+  marker_pin   String
   locationId   String   @unique @db.ObjectId
   createdAt    DateTime @default(now())
 }
