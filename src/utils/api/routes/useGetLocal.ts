@@ -1,11 +1,12 @@
 import { client } from "../hono";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetLocal = (id: string) => {
+export const useGetLocal = (id?: string) => {
   const query = useQuery({
     enabled:!!id,
     queryKey: ['locals', { id }],
     queryFn: async () => {
+      if(!id) throw new Error("Id is required")
       const response = await client.api.locals[':id'].$get({
         param: {
           id
