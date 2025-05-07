@@ -13,9 +13,9 @@ const ContextInfo = createContext<ContextInfoProps>({
 export const ContextInfoProvider = ({children}: {children: ReactNode}) => {
   const [isOpenView, setIsOpenView] = useState(false);
   const [isOpenCreate, setIsOpenCreate] = useState(false);
-  const [id, setId] = useState<string>("")
+  const [id, setId] = useState<string | undefined>("")
 
-  const onOpen = (type: "view" | "select", id: string) => {
+  const onOpen = (type: "view" | "select", id?: string) => {
     switch (type) {
       case "view":
         setId(id)
