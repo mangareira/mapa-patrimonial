@@ -6,8 +6,9 @@ import { compare, hash } from "bcrypt";
 import { sign } from "hono/jwt";
 import { HTTPException } from "hono/http-exception";
 import { setSignedCookie } from "hono/cookie";
+import { middleware } from "./middleware";
 
-const app = new Hono()
+const app = new Hono<{Variables: {admin:{ id: string}}}>()
   .post(
     "/",
     zValidator(
@@ -62,7 +63,36 @@ const app = new Hono()
 
       const token = await sign({sub: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24}, process.env.SECRET_KEY!)
 
-      const refresh_token = await sign({sub: user.email, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7}, process.env.SECRET_KEY!)
+      const refresh_token = await sign({sub: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7}, process.env.SECRET_KEY!)
+
+      await setSignedCookie(c, 'access-token', token,process.env.SECRET_KEY! ,{
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 
+      })
+
+      await setSignedCookie(c, 'refresh-token', refresh_token,process.env.SECRET_KEY! , {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7
+      })
+
+      return c.json({ id: user.id })
+    }
+  )
+  .post(
+    "/refresh-token",
+    middleware("refresh-token"),
+    async (c) => {
+      const user = c.get("admin")
+
+      const token = await sign({sub: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24}, process.env.SECRET_KEY!)
+
+      const refresh_token = await sign({sub: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7}, process.env.SECRET_KEY!)
 
       await setSignedCookie(c, 'access-token', token,process.env.SECRET_KEY! ,{
         httpOnly: true,

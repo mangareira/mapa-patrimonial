@@ -8,7 +8,7 @@ import { middleware } from "./middleware";
 const app = new Hono()
   .post(
     "/", 
-    middleware(),
+    middleware("access-token"),
     zValidator(
       "json", 
       z.object({

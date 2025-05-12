@@ -4,9 +4,9 @@ import { verify } from "hono/jwt"
 import { getSignedCookie } from "hono/cookie"
 import prisma from "@/lib/prisma"
 
-export const middleware = () => {
+export const middleware = (typeToken: "access-token" | "refresh-token") => {
   return async (c: Context, next: Next) => {
-    const token = await getSignedCookie(c, process.env.SECRET_KEY!, "access-token")
+    const token = await getSignedCookie(c, process.env.SECRET_KEY!, typeToken)
     
     if (!token) {
       throw new HTTPException(401, { message: 'Acesso não autorizado. Faça login primeiro.' })
@@ -16,7 +16,11 @@ export const middleware = () => {
       const decoded = await verify(token, process.env.SECRET_KEY!) as {sub: string}
       
       const admin = await prisma.admin.findUnique({
-        where: { id: decoded.sub }})
+        where: { id: decoded.sub },
+        select: {
+          id: true
+        }
+      })
 
       if (!admin) {
         throw new HTTPException(404, { message: 'Administrador não encontrado' })
