@@ -1,7 +1,9 @@
 "use client"
 
+import { cn } from "@/lib/utils";
 import { useLogin } from "@/utils/api/routes/useLogin";
 import { LoginProps } from "@/utils/interfaces/login-props";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,7 +11,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 export default function Login() {
   const router = useRouter()
 
-  const { mutate } = useLogin()
+  const { mutate, isPending } = useLogin()
   const {register, handleSubmit, formState: { errors }} = useForm<LoginProps>()
 
   const onSubmit: SubmitHandler<LoginProps> = (data) => {
@@ -52,9 +54,14 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className={`w-full py-2 px-4 rounded-lg font-semibold`}
+            className={cn(
+              "w-full py-2 px-4 rounded-lg font-semibold flex justify-center",
+              isPending ? 
+                "bg-blue-400 cursor-not-allowed":
+                "bg-blue-600 hover:bg-blue-700"
+            )}
           >
-            Entrar
+            {isPending ? <Loader2 className="animate-spin" />: "Entrar"}
           </button>
         </form>
         <div className="mt-6 text-center">

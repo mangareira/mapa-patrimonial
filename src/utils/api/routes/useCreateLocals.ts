@@ -11,7 +11,11 @@ export const useCreateLocals = () => {
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
-      const res = await client.api.locals.$post({ json })
+      const res = await client.api.locals.$post({ json }, {
+        init: {
+          credentials: "include"
+        }
+      })
       return await res.json()
     },
     onSuccess: () => {
