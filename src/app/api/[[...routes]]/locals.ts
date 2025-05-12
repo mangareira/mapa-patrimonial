@@ -3,10 +3,12 @@ import { newLinks } from "@/utils/functions/newLinks";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
+import { middleware } from "./middleware";
 
 const app = new Hono()
   .post(
     "/", 
+    middleware(),
     zValidator(
       "json", 
       z.object({

@@ -3,7 +3,9 @@ import { Hono } from "hono";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { compare, hash } from "bcrypt";
-import { sign } from "jsonwebtoken"
+import { sign } from "hono/jwt";
+import { HTTPException } from "hono/http-exception";
+import { setSignedCookie } from "hono/cookie";
 
 const app = new Hono()
   .post(
@@ -48,32 +50,37 @@ const app = new Hono()
         }
       })
 
-      if (!user) {
-        return c.json({ error: "Admin não encontrado" }, 404)
-      }
+      if (!user) throw new HTTPException(404, {
+        message: "Admin não encontrado"
+      })
 
       const verify = await compare(res.password, user.password)
 
-      if (!verify) {
-        return c.json({ error: "Senha errada" }, 401)
-      }
-
-      const token = sign({email: user.email}, process.env.SECRET_KEY!, {
-        algorithm: "HS256",
-        expiresIn: "1d",
-        subject: user.id
+      if (!verify) throw new HTTPException(401, {
+        message: "Senha incorreta"
       })
 
-      const refresh_token = sign({email: user.email}, process.env.SECRET_KEY!, {
-        algorithm: "HS256",
-        expiresIn: "7d",
-        subject: user.id
-      }) 
+      const token = await sign({sub: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24}, process.env.SECRET_KEY!)
 
-      return c.json({
-        token,
-        refresh_token,
+      const refresh_token = await sign({sub: user.email, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7}, process.env.SECRET_KEY!)
+
+      await setSignedCookie(c, 'access-token', token,process.env.SECRET_KEY! ,{
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 
       })
+
+      await setSignedCookie(c, 'refresh-token', refresh_token,process.env.SECRET_KEY! , {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7
+      })
+
+      return c.json({ id: user.id })
     }
   )
 
