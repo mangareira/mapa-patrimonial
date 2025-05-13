@@ -15,7 +15,7 @@ export const useLogin = () => {
       return await res.json()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin"] })
+      queryClient.invalidateQueries({ queryKey: ["admin"]})
       toast.success("Login feito com sucesso")
     },
     onError: () => {

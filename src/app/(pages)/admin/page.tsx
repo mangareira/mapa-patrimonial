@@ -17,7 +17,9 @@ export default function Login() {
   const onSubmit: SubmitHandler<LoginProps> = (data) => {
     mutate(data, {
       onSuccess: () => {
-        router.push("/")
+        setTimeout(() => {
+          router.push("/")
+        }, 100)
       }
     })
   }

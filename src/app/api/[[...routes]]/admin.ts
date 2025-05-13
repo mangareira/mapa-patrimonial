@@ -113,5 +113,13 @@ const app = new Hono<{Variables: {admin:{ id: string}}}>()
       return c.json({ id: user.id })
     }
   )
+  .get(
+    "/me",
+    middleware("access-token"),
+    async (c) => {
+      const admin = c.get("admin");
+      return c.json({ id: admin.id });
+    }
+  )
 
 export default app
